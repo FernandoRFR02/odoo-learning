@@ -1,0 +1,16 @@
+{
+'name': "Libreria",
+'summary': "Administra tus libros",
+'description': """Long description""",
+'author': "Fernando Figuereo",
+'license': "AGPL-3",
+'website': "http://www.example.com",
+'category': 'Uncategorized',
+'version': '0.01',
+'depends': ['base'],
+'data': ['views/library_book.xml',
+         'security/groups.xml',
+         'security/ir.model.access.csv',
+         ],
+'demo': ['demo.xml'],
+}
