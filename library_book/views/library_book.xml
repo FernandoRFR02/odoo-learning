@@ -19,13 +19,19 @@
             <field name="model">library.book</field>
             <field name="arch" type="xml">
                 <form>
-                    <group>
-                        <field name="name"/>
-                        <field name="author_ids" widget="many2many_tags"/>
-                    </group>
-                    <group>
-                        <field name="date_release"/>
-                    </group>
+                    <sheet>
+                        <group>
+                            <group string="Main Data" groups="library_book.group_librarian">
+                                <field name="show_name"/>
+                                <field name="limit_users"/>
+                                <field name="name" attrs="{'invisible': [('show_name','=',False)]}"/>
+                                <field name="author_ids" widget="many2many_tags"/>
+                            </group>
+                            <group string="Release Data">
+                                <field name="date_release"/>
+                            </group>
+                        </group>
+                    </sheet>
                 </form>
             </field>
         </record>
