@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo.odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
 
 
@@ -37,3 +37,17 @@ class LibraryBook(models.Model):
                            company_dependent=False,)
     reader_rating = fields.Float('Reader Average Rating', digits=(14, 4))
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
+    currency_id = fields.Many2one('res.currency', string='Currency')
+    retail_price = fields.Monetary('Retail Price', currency_field='currency_id',)
+    publisher_id = fields.Many2one('res.partner',
+                                   string='Publisher',
+                                   ondelete='set null',)
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
+    author_ids = fields.Many2many('res.partner', string='Authors')
+    authored_book_ids = fields.Many2many('library.book',
+                                         string='Authored Books',
+                                         relation='library_book_res_partner_rel')
