@@ -7,7 +7,7 @@
     "website": "http://www.example.com",
     "category": "Uncategorized",
     "version": "11.0.1.0.0",
-    "depends": ["base"],
+    "depends": ["base", 'decimal_precision'],
     "data": [
         "security/groups.xml",
         "security/ir.model.access.csv",
