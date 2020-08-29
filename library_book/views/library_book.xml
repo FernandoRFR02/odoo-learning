@@ -26,9 +26,13 @@
                                 <!--<field name="limit_users"/>-->
                                 <field name="name" attrs="{'invisible': [('short_name','=',False)]}"/>
                                 <field name="author_ids" widget="many2many_tags"/>
+                                <field name="state"/>
+                                <field name="cost_price"/>
                             </group>
                             <group string="Release Data">
                                 <field name="date_release"/>
+                                <field name="date_updated"/>
+                                <field name="age_days"/>
                             </group>
                         </group>
                     </sheet>
@@ -42,6 +46,8 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
+                    <field name="cost_price"/>
+                    <field name="state"/>
                     <field name="date_release"/>
                 </tree>
             </field>
