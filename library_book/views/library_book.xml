@@ -14,7 +14,7 @@
                 parent=""
                 sequence="5" />
 
-        <record id="library_book_view_form" model="ir.ui.view">
+            <record id="library_book_view_form" model="ir.ui.view">
             <field name="name">Library Book Form</field>
             <field name="model">library.book</field>
             <field name="arch" type="xml">
@@ -22,9 +22,9 @@
                     <sheet>
                         <group>
                             <group string="Main Data" groups="library_book.group_librarian">
-                                <field name="show_name"/>
-                                <field name="limit_users"/>
-                                <field name="name" attrs="{'invisible': [('show_name','=',False)]}"/>
+                                <field name="short_name"/>
+                                <!--<field name="limit_users"/>-->
+                                <field name="name" attrs="{'invisible': [('short_name','=',False)]}"/>
                                 <field name="author_ids" widget="many2many_tags"/>
                             </group>
                             <group string="Release Data">
