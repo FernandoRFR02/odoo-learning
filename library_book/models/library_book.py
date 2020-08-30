@@ -6,6 +6,7 @@ from datetime import timedelta
 
 class LibraryBook(models.Model):
     _name = "library.book"
+    _inherit = ['base.archive']
     _description = "Library Book"
     _order = 'date_release desc, name'
     _rec_name = 'short_name'
@@ -43,6 +44,11 @@ class LibraryBook(models.Model):
     publisher_id = fields.Many2one('res.partner',
                                    string='Publisher',
                                    ondelete='set null', )
+    publisher_city = fields.Char(
+        'Publisher City',
+        related='publisher_id.city',
+        readonly=True)
+
     age_days = fields.Float(
         string='Days Since Release',
         compute='_compute_age',
@@ -86,11 +92,48 @@ class LibraryBook(models.Model):
         new_op = operator_map.get(operator, operator)
         return [('date_release', new_op, value_date)]
 
+    @api.model
+    def _referencable_models(self):
+        models = self.env['res.request.link'].search([])
+        return [(x.object, x.name) for x in models]
+
+    ref_doc_id = fields.Reference(
+        selection='_referencable_models',
+        string='Reference Document')
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
+    _order = 'name'
 
     published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
     authored_book_ids = fields.Many2many('library.book',
                                          string='Authored Books',
                                          relation='library_book_res_partner_rel')
+    count_books = fields.Integer('Number of Authored Books',
+                                 compute='_compute_count_books')
+
+    @api.depends('authored_book_ids')
+    def _compute_count_books(self):
+        for r in self:
+            r.count_books = len(r.authored_book_ids)
+
+
+class LibraryMember(models.Model):
+    _inherit = {'res.partner': 'partner_id'}
+    _name = 'library.member'
+    partner_id = fields.Many2one('res.partner',
+                                 ondelete='cascade')
+    date_start = fields.Date('Member Since')
+    date_end = fields.Date('Termination Date')
+    member_number = fields.Char()
+    date_of_birth = fields.Date('Date of birth')
+
+
+class BaseArchive(models.AbstractModel):
+    _name = 'base.archive'
+    active = fields.Boolean(default=True)
+
+    def do_archive(self):
+        for record in self:
+            record.active = not record.active
