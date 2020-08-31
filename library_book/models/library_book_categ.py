@@ -22,8 +22,9 @@ def _check_hierarchy(self):
     if not self._check_recursion():
         raise models.ValidationError('Error! You cannot create recursive categories.')
 
-    class LibraryBook(models.Model):
-        _name = 'library.book'
+
+class LibraryBook(models.Model):
+    _name = 'library.book'
 
     name = fields.Char('Title', required=True)
     date_release = fields.Date('Release Date')
