@@ -2,22 +2,19 @@ from odoo import models, fields, api
 from odoo11.odoo.addons import decimal_precision as dp
 from odoo.fields import Date as fDate
 from datetime import timedelta
-from odoo.exceptions import UserError
 
 
 class LibraryBook(models.Model):
+
     _name = "library.book"
     _description = "Library Book"
     _order = 'date_release desc, name'
     _rec_name = 'short_name'
-    short_name = fields.Char('Short Title', required=True)
 
     name = fields.Char("Title", required=True)
     date_release = fields.Date("Release Date")
     author_ids = fields.Many2many('res.partner', string='Authors')
-    short_name = fields.Char(string='Short Title',
-                             size=100,
-                             translate=False, )
+    short_name = fields.Char(string='Short Title', required=True, )
     notes = fields.Text('Internal Notes')
     state = fields.Selection([('draft', 'Not Available'), ('available', 'Available'), ('lost', 'Lost')], 'State')
 
@@ -38,12 +35,10 @@ class LibraryBook(models.Model):
                            required=False,
                            company_dependent=False, )
     reader_rating = fields.Float('Reader Average Rating', digits=(14, 4))
-    cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'), currency_field='currency_id',)
+    cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary('Retail Price', currency_field='currency_id', )
-    publisher_id = fields.Many2one('res.partner',
-                                   string='Publisher',
-                                   ondelete='set null', )
+    publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', )
     publisher_city = fields.Char('Publisher City',
                                  related='publisher_id.city',
                                  readonly=True)
@@ -123,7 +118,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     _order = 'name'
 
-    published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
+#    published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
     authored_book_ids = fields.Many2many('library.book',
                                          string='Authored Books',
                                          relation='library_book_res_partner_rel')

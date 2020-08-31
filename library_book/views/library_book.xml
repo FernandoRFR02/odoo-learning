@@ -26,7 +26,7 @@
                                 <field name="name" attrs="{'invisible': [('short_name','=',False)]}"/>
                                 <field name="author_ids" widget="many2many_tags"/>
                                 <field name="description"/>
-                                <field name="state"/>
+                                <field name="state" widget="many2many_tags"/>
                                 <field name="pages"/>
                                 <field name="cover" widget="image" width="100px" height="160px"/>
                             </group>
@@ -40,7 +40,6 @@
                                 <field name="currency_id"/>
                                 <field name="reader_rating"/>
                                 <field name="publisher_id"/>
-                                <field name="publisher_city"/>
                             </group>
                     </sheet>
                 </form>
