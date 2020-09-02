@@ -5,19 +5,16 @@ from datetime import timedelta
 
 
 class LibraryBook(models.Model):
+
     _name = "library.book"
-    _inherit = ['base.archive']
     _description = "Library Book"
     _order = 'date_release desc, name'
     _rec_name = 'short_name'
-    short_name = fields.Char('Short Title', required=True)
 
     name = fields.Char("Title", required=True)
     date_release = fields.Date("Release Date")
     author_ids = fields.Many2many('res.partner', string='Authors')
-    short_name = fields.Char(string='Short Title',
-                             size=100,
-                             translate=False, )
+    short_name = fields.Char(string='Short Title', required=True, )
     notes = fields.Text('Internal Notes')
     state = fields.Selection([('draft', 'Not Available'), ('available', 'Available'), ('lost', 'Lost')], 'State')
 
@@ -41,13 +38,10 @@ class LibraryBook(models.Model):
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary('Retail Price', currency_field='currency_id', )
-    publisher_id = fields.Many2one('res.partner',
-                                   string='Publisher',
-                                   ondelete='set null', )
-    publisher_city = fields.Char(
-        'Publisher City',
-        related='publisher_id.city',
-        readonly=True)
+    publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', )
+    publisher_city = fields.Char('Publisher City',
+                                 related='publisher_id.city',
+                                 readonly=True)
 
     age_days = fields.Float(
         string='Days Since Release',
@@ -101,12 +95,30 @@ class LibraryBook(models.Model):
         selection='_referencable_models',
         string='Reference Document')
 
+    @api.model
+    def is_allowed_transition(self, old_state, new_state):
+        allowed = [('draft', 'available'),
+                   ('available', 'borrowed'),
+                   ('borrowed', 'available'),
+                   ('available', 'lost'),
+                   ('borrowed', 'lost'),
+                   ('lost', 'available')]
+        return (old_state, new_state) in allowed
+
+    @api.multi
+    def change_state(self, new_state):
+        for book in self:
+            if book.is_allowed_transition(book.state, new_state):
+                book.state = new_state
+            else:
+                continue
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     _order = 'name'
 
-    published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
+#    published_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
     authored_book_ids = fields.Many2many('library.book',
                                          string='Authored Books',
                                          relation='library_book_res_partner_rel')
@@ -118,6 +130,12 @@ class ResPartner(models.Model):
         for r in self:
             r.count_books = len(r.authored_book_ids)
 
+    @api.constrains('date_release')
+    def _check_release_date(self):
+        for record in self:
+            if (record.date_release and
+                    record.date_release > fields.Date.today()):
+                raise models.ValidationError('Release date must be in the past')
 
 class LibraryMember(models.Model):
     _inherit = {'res.partner': 'partner_id'}

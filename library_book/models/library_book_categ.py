@@ -22,21 +22,4 @@ def _check_hierarchy(self):
     if not self._check_recursion():
         raise models.ValidationError('Error! You cannot create recursive categories.')
 
-    class LibraryBook(models.Model):
-        _name = 'library.book'
 
-    name = fields.Char('Title', required=True)
-    date_release = fields.Date('Release Date')
-
-    _sql_constraints = [
-        ('name_uniq',
-         'UNIQUE (name)',
-         'Book title must be unique.')
-    ]
-
-    @api.constrains('date_release')
-    def _check_release_date(self):
-        for record in self:
-            if (record.date_release and
-                    record.date_release > fields.Date.today()):
-                raise models.ValidationError('Release date must be in the past')

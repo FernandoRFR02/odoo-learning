@@ -20,39 +20,45 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <group>
                             <group string="Main Data" groups="library_book.group_librarian">
                                 <field name="short_name"/>
                                 <!--<field name="limit_users"/>-->
                                 <field name="name" attrs="{'invisible': [('short_name','=',False)]}"/>
                                 <field name="author_ids" widget="many2many_tags"/>
+                                <field name="description"/>
                                 <field name="state"/>
-                                <field name="cost_price"/>
+                                <field name="pages"/>
+                                <field name="cover" widget="image" width="100px" height="160px"/>
                             </group>
                             <group string="Release Data">
                                 <field name="date_release"/>
                                 <field name="date_updated"/>
                                 <field name="age_days"/>
+                                <field name="notes"/>
+                                <field name="cost_price"/>
+                                <field name="retail_price"/>
+                                <field name="currency_id"/>
+                                <field name="reader_rating"/>
+                                <field name="publisher_id"/>
                             </group>
-                        </group>
                     </sheet>
                 </form>
             </field>
         </record>
-
         <record id="library_book_view_tree" model="ir.ui.view">
             <field name="name">Library Book List</field>
             <field name="model">library.book</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="cover" widget="image" width="60px" height="110px"/>
                     <field name="name"/>
-                    <field name="cost_price"/>
+                    <field name="retail_price"/>
                     <field name="state"/>
                     <field name="date_release"/>
+                    <field name="pages"/>
                 </tree>
             </field>
         </record>
-
         <record id="library_book_view_search" model="ir.ui.view">
             <field name="name">Library Book Search</field>
             <field name="model">library.book</field>

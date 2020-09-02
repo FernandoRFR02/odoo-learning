@@ -1,11 +1,11 @@
 {
-    "name": "Libreria",
-    "summary": "Administra tus libros",
+    "name": "Library",
+    "summary": "Managements your books",
     "description": """Long description""",
     "author": "Fernando Figuereo",
-    "license": "AGPL-3",
-    "website": "http://www.example.com",
-    "category": "Uncategorized",
+    "license": "",
+    "website": "librarybookodoo.com",
+    "category": "Inventory",
     "version": "11.0.1.0.0",
     "depends": ["base", 'decimal_precision'],
     "data": [
