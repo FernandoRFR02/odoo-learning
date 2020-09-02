@@ -130,6 +130,12 @@ class ResPartner(models.Model):
         for r in self:
             r.count_books = len(r.authored_book_ids)
 
+    @api.constrains('date_release')
+    def _check_release_date(self):
+        for record in self:
+            if (record.date_release and
+                    record.date_release > fields.Date.today()):
+                raise models.ValidationError('Release date must be in the past')
 
 class LibraryMember(models.Model):
     _inherit = {'res.partner': 'partner_id'}
