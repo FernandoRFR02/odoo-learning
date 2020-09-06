@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<odoo>
+        <record id="res_partner_packt" model="res.partner">
+            <field name="name">Packt Publishing</field>
+            <field name="city">Birmingham</field>
+            <field name="country_id" ref="base.uk" />
+        </record>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'base'),
+                              ('name', '=', 'main_partner')]" />
+            </function>
+            <value eval="{'noupdate': False}" />
+        </function>
+        <record id="base.main_partner" model="res.partner">
+            <field name="book_ids" eval="[(4, ref('book_cookbook'))]"/>
+        </record>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'base'),
+                              ('name', '=', 'main_partner')]" />
+            </function>
+            <value eval="{'noupdate': True}" />
+        </function>
+</odoo>

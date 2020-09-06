@@ -30,7 +30,7 @@
                                 <field name="pages"/>
                                 <field name="cover" widget="image" width="100px" height="160px"/>
                             </group>
-                            <group string="Release Data">
+                            <group string="Release Data" groups="library_book.group_librarian">
                                 <field name="date_release"/>
                                 <field name="date_updated"/>
                                 <field name="age_days"/>
@@ -40,6 +40,7 @@
                                 <field name="currency_id"/>
                                 <field name="reader_rating"/>
                                 <field name="publisher_id"/>
+                                <field name="publisher_city"/>
                             </group>
                     </sheet>
                 </form>
@@ -52,6 +53,7 @@
                 <tree>
                     <field name="cover" widget="image" width="60px" height="110px"/>
                     <field name="name"/>
+                    <field name="author_ids" widget="many2many_tags"/>
                     <field name="retail_price"/>
                     <field name="state"/>
                     <field name="date_release"/>
@@ -71,6 +73,51 @@
                 </search>
             </field>
         </record>
+        <act_window
+                    id="library_member_action"
+                    name="Library Members"
+                    res_model="library.member" />
 
+                    <menuitem
+                        id="library_member_menu"
+                        name="Members"
+                        action="library_member_action"
+                        parent=""
+                        sequence="5" />
+
+
+                    <record id="library_member_view_form" model="ir.ui.view">
+                    <field name="name">Library Member Form</field>
+                    <field name="model">library.member</field>
+                    <field name="arch" type="xml">
+                        <form>
+                            <sheet>
+                                    <group string="Member Data">
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                        <field name="date"/>
+                                        <field name="is_company"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                        <field name="member_number"/>
+                                        <field name="date_of_birth"/>
+                                    </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </record>
+                <record id="library_member_view_tree" model="ir.ui.view">
+                    <field name="name">Library Book List</field>
+                    <field name="model">library.member</field>
+                    <field name="arch" type="xml">
+                        <tree>
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="member_number"/>
+                            <field name="date_of_birth"/>
+                        </tree>
+                    </field>
+                </record>
     </data>
 </odoo>
