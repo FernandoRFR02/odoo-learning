@@ -119,5 +119,48 @@
                         </tree>
                     </field>
                 </record>
+        <act_window id="action_all_customers"
+            name="All customers"
+            res_model="res.partner"
+            view_mode="list,form"
+            domain="[('customer', '=', True)]"
+            context="{'default_customer': True}"
+            limit="80"/>
+                <menuitem id="menu_custom_toplevel"
+                    name="Customers"/>
+                    <menuitem id="menu_custom_left"
+                        parent="menu_custom_toplevel"
+                        name="Menu"/>
+                            <menuitem id="menu_all_customers"
+                                parent="menu_custom_left"
+                                action="action_all_customers"
+                                sequence="10"
+                                groups=""/>
+                <record id="form_all_customers" model="ir.ui.view">
+                    <field name="name">All customers</field>
+                    <field name="model">res.partner</field>
+                    <field name="arch" type="xml">
+                        <form>
+                            <group>
+                                <header>
+                                <button type="object" name="open_commercial_entity"
+                                        string="Open commercial partner"
+                                        class="btn-primary" />
+                                </header>
+                                <group string="Content" name="my_content">
+                                    <field name="name" />
+                                    <field name="category_id" widget="many2many_tags" />
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </record>
+                <record id="action_all_customers_form"
+                        model="ir.actions.act_window.view">
+                    <field name="act_window_id" ref="action_all_customers" />
+                    <field name="view_id" ref="form_all_customers" />
+                    <field name="view_mode">form</field>
+                    <field name="sequence">10</field>
+                </record>
     </data>
 </odoo>
